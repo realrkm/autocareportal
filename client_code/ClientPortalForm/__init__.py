@@ -107,6 +107,8 @@ class ClientPortalForm(ClientPortalFormTemplate):
               style.textContent = [
                 '.portal-root{font-size:16px!important;}',
                 '.portal-root .data-value{font-size:16px!important;}',
+                '.portal-root .portal-header{position:fixed!important;top:0;left:0;right:0;z-index:10001;}',
+                '.portal-root .portal-inner{padding-top:84px!important;}',
                 '.portal-root.theme-light{',
                 '  --bg:#f5f7fb;',
                 '  --surface:#ffffff;',
