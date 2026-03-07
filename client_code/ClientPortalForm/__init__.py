@@ -105,7 +105,39 @@ class ClientPortalForm(ClientPortalFormTemplate):
               }})();
             """)
         except Exception as e:
+            err = str(e)
+            if 'No job found' in err:
+                self._show_loading_message(
+                    "No Service Job Yet",
+                    "Your account was created successfully. Service details will appear here once your job is added in the back office."
+                )
+                return
+
+            self._show_loading_message(
+                "Could Not Load Service Data",
+                "Please try again in a moment. If the issue continues, contact support."
+            )
             alert(f"Could not load portal data: {e}")
+
+    def _show_loading_message(self, title, message):
+        import json
+        title_json = json.dumps(str(title))
+        message_json = json.dumps(str(message))
+        anvil.js.call_js('eval', f"""
+          (function() {{
+            var loading = document.getElementById('loading');
+            var content = document.getElementById('portal-content');
+            if (content) content.style.display = 'none';
+            if (!loading) return;
+
+            loading.style.display = 'flex';
+            loading.innerHTML =
+              '<div style="max-width:560px;text-align:center;line-height:1.55">' +
+                '<div style="font-family:\\'Syne\\',sans-serif;font-size:22px;color:var(--text);margin-bottom:10px">' + {title_json} + '</div>' +
+                '<div style="font-size:14px;color:var(--text-muted)">' + {message_json} + '</div>' +
+              '</div>';
+          }})();
+        """)
 
     # ── BRIDGE: logout ────────────────────────────────────
     def _handle_logout(self):
@@ -144,6 +176,14 @@ class ClientPortalForm(ClientPortalFormTemplate):
               }})();
             """)
         except Exception as e:
+            err = str(e)
+            if 'No job found' in err:
+                self._show_loading_message(
+                    "No Service Job Yet",
+                    "Your account was created successfully. Service details will appear here once your job is added in the back office."
+                )
+                return
+
             anvil.js.call_js('eval', """
               var loading = document.getElementById('loading');
               var content = document.getElementById('portal-content');

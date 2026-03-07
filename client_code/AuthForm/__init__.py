@@ -19,7 +19,7 @@ from ..auth_html import AUTH_CSS, AUTH_BODY, AUTH_JS
 class AuthForm(AuthFormTemplate):
     def __init__(self, **properties):
         self.init_components(**properties)
-
+        
         # Already logged in? Go straight to portal
         try:
             user = anvil.users.get_user()
