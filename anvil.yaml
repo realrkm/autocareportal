@@ -1,4 +1,449 @@
 allow_embedding: false
+db_schema:
+  customers:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: name
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: phone
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: email
+      type: string
+    server: full
+    title: customers
+  invoice_items:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: invoice
+      target: invoices
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: description
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: qty
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: unit_price
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: total
+      type: number
+    server: full
+    title: invoice_items
+  invoices:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: job
+      target: jobs
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: invoice_ref
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: invoice_date
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: due_date
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: currency
+      type: string
+    - admin_ui: {order: 6, width: 200}
+      client_hidden: false
+      name: subtotal
+      type: number
+    - admin_ui: {order: 7, width: 200}
+      client_hidden: false
+      name: discount
+      type: number
+    - admin_ui: {order: 8, width: 200}
+      client_hidden: false
+      name: discount_label
+      type: string
+    - admin_ui: {order: 9, width: 200}
+      client_hidden: false
+      name: tax
+      type: number
+    - admin_ui: {order: 10, width: 200}
+      client_hidden: false
+      name: tax_label
+      type: string
+    - admin_ui: {order: 11, width: 200}
+      client_hidden: false
+      name: total_due
+      type: number
+    - admin_ui: {order: 12, width: 200}
+      client_hidden: false
+      name: biller_name
+      type: string
+    - admin_ui: {order: 13, width: 200}
+      client_hidden: false
+      name: biller_pin
+      type: string
+    - admin_ui: {order: 14, width: 200}
+      client_hidden: false
+      name: biller_address
+      type: string
+    - admin_ui: {order: 15, width: 200}
+      client_hidden: false
+      name: biller_phone
+      type: string
+    server: full
+    title: invoices
+  jobs:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: job_ref
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: customer
+      target: customers
+      type: link_single
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: vehicle
+      target: vehicles
+      type: link_single
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: advisor
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: bay
+      type: string
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: checkin_date
+      type: date
+    - admin_ui: {order: 6, width: 200}
+      client_hidden: false
+      name: checkin_time
+      type: string
+    - admin_ui: {order: 7, width: 200}
+      client_hidden: false
+      name: mileage_in
+      type: number
+    - admin_ui: {order: 8, width: 200}
+      client_hidden: false
+      name: fuel_level
+      type: string
+    - admin_ui: {order: 9, width: 200}
+      client_hidden: false
+      name: exterior_condition
+      type: string
+    - admin_ui: {order: 10, width: 200}
+      client_hidden: false
+      name: warning_lights
+      type: string
+    - admin_ui: {order: 11, width: 200}
+      client_hidden: false
+      name: customer_complaint
+      type: string
+    - admin_ui: {order: 12, width: 200}
+      client_hidden: false
+      name: service_type
+      type: string
+    - admin_ui: {order: 13, width: 200}
+      client_hidden: false
+      name: current_step
+      type: number
+    - admin_ui: {order: 14, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    server: full
+    title: jobs
+  payment_history:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: payment
+      target: payments
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: date
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: method
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: reference
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: amount
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    server: full
+    title: payment_history
+  payments:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: job
+      target: jobs
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: currency
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: balance
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: deposit_paid
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    server: full
+    title: payments
+  quotations:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: job
+      target: jobs
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: quote_ref
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: currency
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: subtotal
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: discount
+      type: number
+    - admin_ui: {order: 6, width: 200}
+      client_hidden: false
+      name: discount_label
+      type: string
+    - admin_ui: {order: 7, width: 200}
+      client_hidden: false
+      name: tax
+      type: number
+    - admin_ui: {order: 8, width: 200}
+      client_hidden: false
+      name: tax_label
+      type: string
+    - admin_ui: {order: 9, width: 200}
+      client_hidden: false
+      name: grand_total
+      type: number
+    - admin_ui: {order: 10, width: 200}
+      client_hidden: false
+      name: est_duration
+      type: string
+    - admin_ui: {order: 11, width: 200}
+      client_hidden: false
+      name: approval_status
+      type: string
+    server: full
+    title: quotations
+  quote_items:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: quotation
+      target: quotations
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: description
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: item_type
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: qty
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: unit_price
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: total
+      type: number
+    server: full
+    title: quote_items
+  service_log:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: job
+      target: jobs
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: technician
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: start_date
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: est_completion
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: progress_pct
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    server: full
+    title: service_log
+  tech_notes:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: service
+      target: service_log
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: note_text
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: color
+      type: string
+    server: full
+    title: tech_notes
+  timeline:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: service
+      target: service_log
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: time_label
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: title
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: description
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: status
+      type: string
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: sort_order
+      type: number
+    server: full
+    title: timeline
+  users:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: email
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: enabled
+      type: bool
+    - admin_ui: {order: 2, width: 200}
+      client_hidden: false
+      name: last_login
+      type: datetime
+    - admin_ui: {order: 3, width: 200}
+      client_hidden: false
+      name: password_hash
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      client_hidden: false
+      name: n_password_failures
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      client_hidden: false
+      name: confirmed_email
+      type: bool
+    - admin_ui: {order: 6, width: 200}
+      client_hidden: false
+      name: signed_up
+      type: datetime
+    server: full
+    title: Users
+  vehicles:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      client_hidden: false
+      name: plate
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      client_hidden: false
+      name: model
+      type: string
+    server: full
+    title: vehicles
 dependencies: []
 name: M3 App 3
 package_name: M3_App_3
@@ -12,4 +457,8 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
-startup_form: Form1
+- client_config: {allow_signup: true, confirm_email: false, enable_automatically: true, require_secure_passwords: true, use_email: true}
+  server_config: {user_table: users}
+  source: /runtime/services/anvil/users.yml
+startup: {module: ClientPortalForm, type: form}
+startup_form: null
