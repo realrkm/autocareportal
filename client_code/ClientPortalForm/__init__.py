@@ -35,8 +35,10 @@ class ClientPortalForm(ClientPortalFormTemplate):
         self._inject_html()
 
         # 2. Register Python bridges on window BEFORE JS runs
-        anvil.js.window['_anvilPayHandler'] = self._js_pay_handler
-        anvil.js.window['_anvilLogout']     = self._handle_logout
+        anvil.js.window['_anvilPayHandler']       = self._js_pay_handler
+        anvil.js.window['_anvilLogout']           = self._handle_logout
+        anvil.js.window['_anvilGetCustomerJobs']  = self._get_customer_jobs
+        anvil.js.window['_anvilSwitchJob']        = self._switch_job
 
         # 3. Inject JS (event listeners run immediately, bridges already on window)
         self._inject_js()
@@ -118,6 +120,37 @@ class ClientPortalForm(ClientPortalFormTemplate):
         """)
         from ..AuthForm import AuthForm
         open_form(AuthForm())
+
+    # ── BRIDGE: get all jobs for this customer ───────────
+    def _get_customer_jobs(self, job_ref):
+        try:
+            jobs = anvil.server.call('get_customer_jobs', str(job_ref))
+            return jobs
+        except Exception:
+            return []
+
+    # ── BRIDGE: switch to a different job ─────────────────
+    def _switch_job(self, job_ref):
+        self.job_ref = str(job_ref)
+        import json
+        try:
+            data = anvil.server.call('get_portal_data', self.job_ref)
+            data_json = self._to_json(data)
+            anvil.js.call_js('eval', f"""
+              (function() {{
+                if (typeof populatePortal === 'function') {{
+                  populatePortal({data_json});
+                }}
+              }})();
+            """)
+        except Exception as e:
+            anvil.js.call_js('eval', """
+              var loading = document.getElementById('loading');
+              var content = document.getElementById('portal-content');
+              if (loading) loading.style.display = 'none';
+              if (content) content.style.display = 'block';
+            """)
+            alert(f"Could not load job: {e}")
 
     # ── BRIDGE: payment ───────────────────────────────────
     def _js_pay_handler(self, payment_method):

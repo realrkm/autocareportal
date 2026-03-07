@@ -136,6 +136,57 @@ def get_portal_data(job_ref=None):
     }
 
 
+
+@anvil.server.callable
+def get_customer_jobs(job_ref=None):
+    """
+    Returns a list of all jobs for the customer linked to the given job_ref
+    (or the logged-in user if no job_ref given).
+    Each item: { job_ref, vehicle_plate, vehicle_model, date, status, step, is_current }
+    """
+    # Identify the customer
+    if job_ref:
+        job = app_tables.jobs.get(job_ref=job_ref)
+        if not job:
+            return []
+        customer = job['customer']
+    else:
+        user = anvil.users.get_user()
+        if not user:
+            return []
+        customer = app_tables.customers.get(email=user['email'])
+        if not customer:
+            return []
+
+    # Fetch all jobs for this customer, newest first
+    all_jobs = list(app_tables.jobs.search(
+        tables.order_by('checkin_date', ascending=False),
+        customer=customer
+    ))
+
+    step_labels = {1: 'Checked In', 2: 'Quotation', 3: 'In Service', 4: 'Invoice', 5: 'Completed'}
+    status_badge = {
+        'Completed':         'green',
+        'Paid':              'green',
+        'In Progress':       'accent',
+        'Invoice Issued':    'orange',
+        'Quotation Pending': 'blue',
+        'Checked In':        'blue',
+    }
+
+    return [{
+        'job_ref':       j['job_ref'],
+        'vehicle_plate': j['vehicle']['plate'],
+        'vehicle_model': j['vehicle']['model'],
+        'date':          str(j['checkin_date']),
+        'status':        j['status'],
+        'step':          j['current_step'] or 1,
+        'step_label':    step_labels.get(j['current_step'] or 1, '—'),
+        'badge_color':   status_badge.get(j['status'], 'blue'),
+        'is_current':    j['job_ref'] == job_ref,
+    } for j in all_jobs]
+
+
 # ════════════════════════════════════════════════════════════
 #  BUILDER HELPERS
 # ════════════════════════════════════════════════════════════
@@ -377,7 +428,7 @@ def initiate_payment(job_ref, method):
         raise Exception(f"Unknown payment method: {method}")
 
 
-# ════════════════════════════════════════════════════════════
+        # ════════════════════════════════════════════════════════════
 #  OPTIONAL: SEED DEMO DATA  (run once for testing)
 # ════════════════════════════════════════════════════════════
 
