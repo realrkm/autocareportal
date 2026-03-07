@@ -109,6 +109,8 @@ class ClientPortalForm(ClientPortalFormTemplate):
                 '.portal-root .data-value{font-size:16px!important;}',
                 '.portal-root .portal-header{position:fixed!important;top:0;left:0;right:0;z-index:10001;}',
                 '.portal-root .portal-inner{padding-top:84px!important;}',
+                '.portal-root.theme-light .portal-header{background:rgba(245,247,251,0.95)!important;border-bottom:1px solid var(--border)!important;}',
+                '.portal-root.theme-light .status-live{color:var(--green)!important;}',
                 '.portal-root.theme-light{',
                 '  --bg:#f5f7fb;',
                 '  --surface:#ffffff;',
