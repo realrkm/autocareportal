@@ -42,6 +42,7 @@ class ClientPortalForm(ClientPortalFormTemplate):
 
         # 3. Inject JS (event listeners run immediately, bridges already on window)
         self._inject_js()
+        self._inject_theme_layer()
 
         # 4. Load and push data
         self.load_portal_data()
@@ -90,6 +91,98 @@ class ClientPortalForm(ClientPortalFormTemplate):
             script.textContent = {js_json};
             document.body.appendChild(script);
           }})();
+        """)
+
+    def _inject_theme_layer(self):
+        anvil.js.call_js('eval', """
+          (function() {
+            var root = document.querySelector('#garage-portal-root .portal-root');
+            if (!root) return;
+
+            var cssId = 'garage-portal-theme-css';
+            var style = document.getElementById(cssId);
+            if (!style) {
+              style = document.createElement('style');
+              style.id = cssId;
+              style.textContent = [
+                '.portal-root{font-size:16px!important;}',
+                '.portal-root .data-value{font-size:16px!important;}',
+                '.portal-root.theme-light{',
+                '  --bg:#f5f7fb;',
+                '  --surface:#ffffff;',
+                '  --surface-2:#eef2f8;',
+                '  --border:#d6dde8;',
+                '  --accent:#5161ff;',
+                '  --accent-dim:rgba(81,97,255,0.12);',
+                '  --accent-glow:rgba(81,97,255,0.24);',
+                '  --text:#121826;',
+                '  --text-muted:#5f6c84;',
+                '  --text-mid:#4a556d;',
+                '  --green:#0e9f6e;',
+                '  --green-dim:rgba(14,159,110,0.14);',
+                '  --orange:#d97706;',
+                '  --orange-dim:rgba(217,119,6,0.14);',
+                '  --blue:#2563eb;',
+                '  --blue-dim:rgba(37,99,235,0.12);',
+                '  --red:#dc2626;',
+                '  --red-dim:rgba(220,38,38,0.12);',
+                '  --purple:#7c3aed;',
+                '  --purple-dim:rgba(124,58,237,0.12);',
+                '}',
+                '.portal-theme-toggle{',
+                '  padding:7px 12px;',
+                '  background:transparent;',
+                '  border:1px solid var(--border);',
+                '  border-radius:100px;',
+                '  color:var(--text-muted);',
+                '  font-family:\\'DM Sans\\',sans-serif;',
+                '  font-size:12px;',
+                '  font-weight:600;',
+                '  cursor:pointer;',
+                '  transition:all .2s;',
+                '  white-space:nowrap;',
+                '}',
+                '.portal-theme-toggle:hover{',
+                '  border-color:var(--accent);',
+                '  color:var(--accent);',
+                '  background:var(--accent-dim);',
+                '}'
+              ].join('');
+              document.head.appendChild(style);
+            }
+
+            var key = 'autocare-theme';
+            var btn = document.getElementById('portal-theme-toggle-btn');
+            if (!btn) {
+              var right = document.querySelector('#garage-portal-root .ph-right');
+              if (right) {
+                btn = document.createElement('button');
+                btn.id = 'portal-theme-toggle-btn';
+                btn.className = 'portal-theme-toggle';
+                var logoutBtn = document.getElementById('portal-logout-btn');
+                if (logoutBtn) right.insertBefore(btn, logoutBtn);
+                else right.appendChild(btn);
+              }
+            }
+
+            function apply(theme) {
+              var isLight = theme === 'light';
+              root.classList.toggle('theme-light', isLight);
+              if (btn) btn.textContent = isLight ? 'Light' : 'Dark';
+            }
+
+            var stored = null;
+            try { stored = localStorage.getItem(key); } catch (e) {}
+            apply(stored === 'light' ? 'light' : 'dark');
+
+            if (btn) {
+              btn.onclick = function() {
+                var next = root.classList.contains('theme-light') ? 'dark' : 'light';
+                try { localStorage.setItem(key, next); } catch (e) {}
+                apply(next);
+              };
+            }
+          })();
         """)
 
     # ── STEP 4: load data and push to JS ─────────────────

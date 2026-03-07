@@ -40,6 +40,7 @@ class AuthForm(AuthFormTemplate):
 
         # 3. Now run the JS (bridges already on window, addEventListener safe)
         self._inject_js()
+        self._inject_theme_layer()
 
     # ─── STEP 1: inject CSS + HTML (no scripts) ───────────────────
     def _inject_html(self):
@@ -95,6 +96,90 @@ class AuthForm(AuthFormTemplate):
             script.textContent = {js_json};
             document.body.appendChild(script);
           }})();
+        """)
+
+    def _inject_theme_layer(self):
+        anvil.js.call_js('eval', """
+          (function() {
+            var root = document.querySelector('#garage-auth-root .auth-root');
+            if (!root) return;
+
+            var cssId = 'garage-auth-theme-css';
+            var style = document.getElementById(cssId);
+            if (!style) {
+              style = document.createElement('style');
+              style.id = cssId;
+              style.textContent = [
+                '.auth-root{font-size:16px!important;}',
+                '.auth-root.theme-light{',
+                '  --bg:#f5f7fb;',
+                '  --surface:#ffffff;',
+                '  --surface-2:#eef2f8;',
+                '  --border:#d6dde8;',
+                '  --accent:#5161ff;',
+                '  --accent-dim:rgba(81,97,255,0.12);',
+                '  --accent-glow:rgba(81,97,255,0.24);',
+                '  --text:#121826;',
+                '  --text-muted:#5f6c84;',
+                '  --text-mid:#4a556d;',
+                '  --green:#0e9f6e;',
+                '  --green-dim:rgba(14,159,110,0.1);',
+                '  --red:#dc2626;',
+                '  --red-dim:rgba(220,38,38,0.12);',
+                '}',
+                '.auth-theme-toggle{',
+                '  position:fixed;',
+                '  top:18px;',
+                '  right:18px;',
+                '  z-index:10002;',
+                '  padding:8px 12px;',
+                '  border-radius:100px;',
+                '  border:1px solid var(--border);',
+                '  background:var(--surface-2);',
+                '  color:var(--text-muted);',
+                '  font-family:\\'DM Sans\\',sans-serif;',
+                '  font-size:12px;',
+                '  font-weight:600;',
+                '  cursor:pointer;',
+                '  transition:all .2s;',
+                '}',
+                '.auth-theme-toggle:hover{',
+                '  border-color:var(--accent);',
+                '  color:var(--accent);',
+                '  background:var(--accent-dim);',
+                '}'
+              ].join('');
+              document.head.appendChild(style);
+            }
+
+            var key = 'autocare-theme';
+            var btn = document.getElementById('auth-theme-toggle-btn');
+            if (!btn) {
+              btn = document.createElement('button');
+              btn.id = 'auth-theme-toggle-btn';
+              btn.className = 'auth-theme-toggle';
+              var host = document.getElementById('garage-auth-root');
+              if (host) host.appendChild(btn);
+            }
+
+            function apply(theme) {
+              var isLight = theme === 'light';
+              root.classList.toggle('theme-light', isLight);
+              if (btn) btn.textContent = isLight ? 'Light' : 'Dark';
+            }
+
+            var stored = null;
+            try { stored = localStorage.getItem(key); } catch (e) {}
+            apply(stored === 'light' ? 'light' : 'dark');
+
+            if (btn) {
+              btn.onclick = function() {
+                var next = root.classList.contains('theme-light') ? 'dark' : 'light';
+                try { localStorage.setItem(key, next); } catch (e) {}
+                apply(next);
+              };
+            }
+          })();
         """)
 
     # ─── BRIDGES ──────────────────────────────────────────────────
