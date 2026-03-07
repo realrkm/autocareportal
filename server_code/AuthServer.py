@@ -173,6 +173,34 @@ def logout_user():
 #  JOB REFERENCE LOOKUP  (for signup existing-customer flow)
 # ════════════════════════════════════════════════════════════════
 
+
+@anvil.server.callable
+def request_password_reset(email):
+    """
+    Sends a password reset email via Anvil Users service.
+    Always returns a generic success-style message to avoid leaking account existence.
+    """
+    try:
+        email = (email or '').strip().lower()
+        if not email or '@' not in email:
+            return {
+                'success': False,
+                'message': 'Please enter a valid email address.'
+            }
+
+        # Built-in Anvil Users password reset flow.
+        anvil.users.send_password_reset_email(email)
+        return {
+            'success': True,
+            'message': 'If an account exists for that email, a password reset link has been sent.'
+        }
+    except Exception:
+        # Keep response generic for security and UX consistency.
+        return {
+            'success': True,
+            'message': 'If an account exists for that email, a password reset link has been sent.'
+        }
+
 @anvil.server.callable
 def lookup_job_ref(query):
     """

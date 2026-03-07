@@ -37,6 +37,7 @@ class AuthForm(AuthFormTemplate):
         anvil.js.window['_anvilSignup']       = self._handle_signup
         anvil.js.window['_anvilJobLookup']    = self._handle_job_lookup
         anvil.js.window['_anvilLoginSuccess'] = self._on_login_success
+        anvil.js.window['_anvilForgotPassword'] = self._handle_forgot_password
 
         # 3. Now run the JS (bridges already on window, addEventListener safe)
         self._inject_js()
@@ -199,6 +200,43 @@ class AuthForm(AuthFormTemplate):
                 apply(next);
               };
             }
+
+            var forgot = document.getElementById('forgot-password-link');
+            if (!forgot) {
+              var loginForm = document.getElementById('form-login');
+              var loginBtn = document.getElementById('login-btn');
+              if (loginForm && loginBtn) {
+                forgot = document.createElement('div');
+                forgot.id = 'forgot-password-link';
+                forgot.textContent = 'Forgot password?';
+                forgot.style.cssText = 'margin-top:10px;text-align:right;font-size:12px;color:var(--accent);cursor:pointer;font-weight:600;';
+                loginBtn.insertAdjacentElement('afterend', forgot);
+              }
+            }
+
+            if (forgot) {
+              forgot.onclick = function() {
+                var emailEl = document.getElementById('login-email');
+                var email = (emailEl && emailEl.value || '').trim();
+                if (!email) {
+                  email = window.prompt('Enter your account email to receive a reset link:') || '';
+                  email = email.trim();
+                }
+                if (!email) return;
+                if (typeof window._anvilForgotPassword !== 'function') {
+                  window.alert('Password reset service is not ready. Please try again.');
+                  return;
+                }
+                Promise.resolve(window._anvilForgotPassword(email))
+                  .then(function(result) {
+                    var msg = (result && result.message) || 'If the account exists, a reset link has been sent.';
+                    window.alert(msg);
+                  })
+                  .catch(function(err) {
+                    window.alert('Could not send reset link: ' + err);
+                  });
+              };
+            }
           })();
         """)
 
@@ -220,6 +258,12 @@ class AuthForm(AuthFormTemplate):
             return anvil.server.call('lookup_job_ref', str(query))
         except Exception:
             return []
+
+    def _handle_forgot_password(self, email):
+        try:
+            return anvil.server.call('request_password_reset', str(email))
+        except Exception as e:
+            return {'success': False, 'message': str(e)}
 
     def _on_login_success(self, result):
         # Remove all auth assets
