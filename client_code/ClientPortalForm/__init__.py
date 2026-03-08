@@ -106,7 +106,7 @@ class ClientPortalForm(ClientPortalFormTemplate):
               style.id = cssId;
               style.textContent = [
                 '@font-face{font-family:\"PortalFont\";src:url(\"/_/theme/assets/fonts/MozillaHeadline.ttf\") format(\"truetype\");font-display:swap;}',
-                '.portal-root,.portal-root *{font-family:\"PortalFont\",\\'DM Sans\\',sans-serif!important;}',
+                '.portal-root,.portal-root *{font-family:\"PortalFont\",sans-serif!important;}',
                 '.portal-root{font-size:16px!important;}',
                 '.portal-root .data-value{font-size:16px!important;}',
                 '.portal-root .portal-header{position:fixed!important;top:0;left:0;right:0;z-index:10001;}',
@@ -144,7 +144,7 @@ class ClientPortalForm(ClientPortalFormTemplate):
                 '  border-radius:100px;',
                 '  background:var(--surface-2);',
                 '  color:var(--text-muted);',
-                '  font-family:\\'DM Sans\\',sans-serif;',
+                '  font-family:\\'PortalFont\\',sans-serif;',
                 '  font-size:11px;',
                 '  font-weight:600;',
                 '}',
@@ -245,7 +245,7 @@ class ClientPortalForm(ClientPortalFormTemplate):
             loading.style.display = 'flex';
             loading.innerHTML =
               '<div style="max-width:560px;text-align:center;line-height:1.55">' +
-                '<div style="font-family:\\'Syne\\',sans-serif;font-size:22px;color:var(--text);margin-bottom:10px">' + {title_json} + '</div>' +
+                '<div style="font-family:\\'PortalFont\\',sans-serif;font-size:22px;color:var(--text);margin-bottom:10px">' + {title_json} + '</div>' +
                 '<div style="font-size:14px;color:var(--text-muted)">' + {message_json} + '</div>' +
               '</div>';
           }})();

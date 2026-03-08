@@ -112,7 +112,7 @@ class AuthForm(AuthFormTemplate):
               style.id = cssId;
               style.textContent = [
                 '@font-face{font-family:\"PortalFont\";src:url(\"/_/theme/assets/fonts/MozillaHeadline.ttf\") format(\"truetype\");font-display:swap;}',
-                '.auth-root,.auth-root *{font-family:\"PortalFont\",\\'DM Sans\\',sans-serif!important;}',
+                '.auth-root,.auth-root *{font-family:\"PortalFont\",sans-serif!important;}',
                 '.auth-root{font-size:16px!important;}',
                 '.auth-root.theme-light{',
                 '  --bg:#f5f7fb;',
@@ -163,7 +163,7 @@ class AuthForm(AuthFormTemplate):
                 '  border:1px solid var(--border);',
                 '  background:var(--surface-2);',
                 '  color:var(--text-muted);',
-                '  font-family:\\'DM Sans\\',sans-serif;',
+                '  font-family:\\'PortalFont\\',sans-serif;',
                 '  font-size:11px;',
                 '  font-weight:600;',
                 '}',

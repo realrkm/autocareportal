@@ -97,13 +97,23 @@ a>.anvil-component-icon.right_edge-icon,
 
 
 /* Typography */
+@font-face {
+  font-family: "PortalFont";
+  src: url("./fonts/MozillaHeadline.ttf") format("truetype");
+  font-display: swap;
+}
+
 body {
-  font-family: Roboto, Noto, Arial, sans-serif;
+  font-family: "PortalFont", Roboto, Noto, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.4286;
   color: %color:On Surface%;
   background-color: %color:Background%;
   min-height: calc(100vh - 56px)
+}
+
+button, input, select, textarea, label, .anvil-component {
+  font-family: "PortalFont", Roboto, Noto, Arial, sans-serif !important;
 }
 
 @media print {
