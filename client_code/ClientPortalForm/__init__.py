@@ -105,6 +105,8 @@ class ClientPortalForm(ClientPortalFormTemplate):
               style = document.createElement('style');
               style.id = cssId;
               style.textContent = [
+                '@font-face{font-family:\"PortalFont\";src:url(\"/_/theme/assets/fonts/MozillaHeadline.ttf\") format(\"truetype\");font-display:swap;}',
+                '.portal-root,.portal-root *{font-family:\"PortalFont\",\\'DM Sans\\',sans-serif!important;}',
                 '.portal-root{font-size:16px!important;}',
                 '.portal-root .data-value{font-size:16px!important;}',
                 '.portal-root .portal-header{position:fixed!important;top:0;left:0;right:0;z-index:10001;}',

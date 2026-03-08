@@ -111,6 +111,8 @@ class AuthForm(AuthFormTemplate):
               style = document.createElement('style');
               style.id = cssId;
               style.textContent = [
+                '@font-face{font-family:\"PortalFont\";src:url(\"/_/theme/assets/fonts/MozillaHeadline.ttf\") format(\"truetype\");font-display:swap;}',
+                '.auth-root,.auth-root *{font-family:\"PortalFont\",\\'DM Sans\\',sans-serif!important;}',
                 '.auth-root{font-size:16px!important;}',
                 '.auth-root.theme-light{',
                 '  --bg:#f5f7fb;',
