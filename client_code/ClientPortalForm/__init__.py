@@ -134,54 +134,67 @@ class ClientPortalForm(ClientPortalFormTemplate):
                 '  --purple-dim:rgba(124,58,237,0.12);',
                 '}',
                 '.portal-theme-toggle{',
-                '  padding:7px 12px;',
-                '  background:transparent;',
+                '  display:inline-flex;',
+                '  align-items:center;',
+                '  gap:8px;',
+                '  padding:5px 10px;',
                 '  border:1px solid var(--border);',
                 '  border-radius:100px;',
+                '  background:var(--surface-2);',
                 '  color:var(--text-muted);',
                 '  font-family:\\'DM Sans\\',sans-serif;',
-                '  font-size:12px;',
+                '  font-size:11px;',
                 '  font-weight:600;',
-                '  cursor:pointer;',
-                '  transition:all .2s;',
-                '  white-space:nowrap;',
                 '}',
-                '.portal-theme-toggle:hover{',
-                '  border-color:var(--accent);',
-                '  color:var(--accent);',
-                '  background:var(--accent-dim);',
-                '}'
+                '.portal-theme-toggle .lbl{opacity:.75;transition:opacity .2s,color .2s;}',
+                '.portal-theme-toggle[data-theme=\"dark\"] .lbl-dark, .portal-theme-toggle[data-theme=\"light\"] .lbl-light{opacity:1;color:var(--text);}',
+                '.portal-theme-switch{position:relative;display:inline-block;width:44px;height:24px;}',
+                '.portal-theme-switch input{opacity:0;width:0;height:0;position:absolute;}',
+                '.portal-theme-slider{position:absolute;inset:0;border-radius:100px;background:var(--border);cursor:pointer;transition:all .2s;}',
+                '.portal-theme-slider::before{content:\"\";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff;transition:transform .2s;}',
+                '.portal-theme-switch input:checked + .portal-theme-slider{background:var(--accent);}',
+                '.portal-theme-switch input:checked + .portal-theme-slider::before{transform:translateX(20px);}'
               ].join('');
               document.head.appendChild(style);
             }
 
             var key = 'autocare-theme';
-            var btn = document.getElementById('portal-theme-toggle-btn');
-            if (!btn) {
+            var toggleWrap = document.getElementById('portal-theme-toggle-btn');
+            if (!toggleWrap) {
               var right = document.querySelector('#garage-portal-root .ph-right');
               if (right) {
-                btn = document.createElement('button');
-                btn.id = 'portal-theme-toggle-btn';
-                btn.className = 'portal-theme-toggle';
+                toggleWrap = document.createElement('div');
+                toggleWrap.id = 'portal-theme-toggle-btn';
+                toggleWrap.className = 'portal-theme-toggle';
+                toggleWrap.innerHTML =
+                  '<span class=\"lbl lbl-dark\">Dark</span>' +
+                  '<label class=\"portal-theme-switch\">' +
+                    '<input id=\"portal-theme-toggle-input\" type=\"checkbox\" aria-label=\"Toggle light mode\">' +
+                    '<span class=\"portal-theme-slider\"></span>' +
+                  '</label>' +
+                  '<span class=\"lbl lbl-light\">Light</span>';
                 var logoutBtn = document.getElementById('portal-logout-btn');
-                if (logoutBtn) right.insertBefore(btn, logoutBtn);
-                else right.appendChild(btn);
+                if (logoutBtn) right.insertBefore(toggleWrap, logoutBtn);
+                else right.appendChild(toggleWrap);
               }
             }
+            var toggleInput = document.getElementById('portal-theme-toggle-input');
 
             function apply(theme) {
               var isLight = theme === 'light';
               root.classList.toggle('theme-light', isLight);
-              if (btn) btn.textContent = isLight ? 'Light' : 'Dark';
+              if (toggleInput) toggleInput.checked = isLight;
+              if (toggleWrap) toggleWrap.setAttribute('data-theme', isLight ? 'light' : 'dark');
             }
 
             var stored = null;
             try { stored = localStorage.getItem(key); } catch (e) {}
             apply(stored === 'light' ? 'light' : 'dark');
 
-            if (btn) {
-              btn.onclick = function() {
-                var next = root.classList.contains('theme-light') ? 'dark' : 'light';
+            if (toggleInput && !toggleInput.dataset.bound) {
+              toggleInput.dataset.bound = '1';
+              toggleInput.onchange = function() {
+                var next = toggleInput.checked ? 'light' : 'dark';
                 try { localStorage.setItem(key, next); } catch (e) {}
                 apply(next);
               };

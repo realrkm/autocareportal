@@ -153,49 +153,63 @@ class AuthForm(AuthFormTemplate):
                 '  top:18px;',
                 '  right:18px;',
                 '  z-index:10002;',
-                '  padding:8px 12px;',
+                '  display:inline-flex;',
+                '  align-items:center;',
+                '  gap:8px;',
+                '  padding:5px 10px;',
                 '  border-radius:100px;',
                 '  border:1px solid var(--border);',
                 '  background:var(--surface-2);',
                 '  color:var(--text-muted);',
                 '  font-family:\\'DM Sans\\',sans-serif;',
-                '  font-size:12px;',
+                '  font-size:11px;',
                 '  font-weight:600;',
-                '  cursor:pointer;',
-                '  transition:all .2s;',
                 '}',
-                '.auth-theme-toggle:hover{',
-                '  border-color:var(--accent);',
-                '  color:var(--accent);',
-                '  background:var(--accent-dim);',
-                '}'
+                '.auth-theme-toggle .lbl{opacity:.75;transition:opacity .2s,color .2s;}',
+                '.auth-theme-toggle[data-theme=\"dark\"] .lbl-dark, .auth-theme-toggle[data-theme=\"light\"] .lbl-light{opacity:1;color:var(--text);}',
+                '.auth-theme-switch{position:relative;display:inline-block;width:44px;height:24px;}',
+                '.auth-theme-switch input{opacity:0;width:0;height:0;position:absolute;}',
+                '.auth-theme-slider{position:absolute;inset:0;border-radius:100px;background:var(--border);cursor:pointer;transition:all .2s;}',
+                '.auth-theme-slider::before{content:\"\";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff;transition:transform .2s;}',
+                '.auth-theme-switch input:checked + .auth-theme-slider{background:var(--accent);}',
+                '.auth-theme-switch input:checked + .auth-theme-slider::before{transform:translateX(20px);}'
               ].join('');
               document.head.appendChild(style);
             }
 
             var key = 'autocare-theme';
-            var btn = document.getElementById('auth-theme-toggle-btn');
-            if (!btn) {
-              btn = document.createElement('button');
-              btn.id = 'auth-theme-toggle-btn';
-              btn.className = 'auth-theme-toggle';
+            var toggleWrap = document.getElementById('auth-theme-toggle-btn');
+            if (!toggleWrap) {
+              toggleWrap = document.createElement('div');
+              toggleWrap.id = 'auth-theme-toggle-btn';
+              toggleWrap.className = 'auth-theme-toggle';
+              toggleWrap.innerHTML =
+                '<span class=\"lbl lbl-dark\">Dark</span>' +
+                '<label class=\"auth-theme-switch\">' +
+                  '<input id=\"auth-theme-toggle-input\" type=\"checkbox\" aria-label=\"Toggle light mode\">' +
+                  '<span class=\"auth-theme-slider\"></span>' +
+                '</label>' +
+                '<span class=\"lbl lbl-light\">Light</span>';
               var host = document.getElementById('garage-auth-root');
-              if (host) host.appendChild(btn);
+              if (host) host.appendChild(toggleWrap);
             }
+            var toggleInput = document.getElementById('auth-theme-toggle-input');
 
             function apply(theme) {
               var isLight = theme === 'light';
               root.classList.toggle('theme-light', isLight);
-              if (btn) btn.textContent = isLight ? 'Light' : 'Dark';
+              if (toggleInput) toggleInput.checked = isLight;
+              if (toggleWrap) toggleWrap.setAttribute('data-theme', isLight ? 'light' : 'dark');
             }
 
             var stored = null;
             try { stored = localStorage.getItem(key); } catch (e) {}
             apply(stored === 'light' ? 'light' : 'dark');
 
-            if (btn) {
-              btn.onclick = function() {
-                var next = root.classList.contains('theme-light') ? 'dark' : 'light';
+            if (toggleInput && !toggleInput.dataset.bound) {
+              toggleInput.dataset.bound = '1';
+              toggleInput.onchange = function() {
+                var next = toggleInput.checked ? 'light' : 'dark';
                 try { localStorage.setItem(key, next); } catch (e) {}
                 apply(next);
               };
