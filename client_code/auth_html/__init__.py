@@ -474,9 +474,20 @@ input::placeholder { color: var(--text-muted); opacity: 0.6; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 700px) {
-  .auth-split       { grid-template-columns: 1fr; max-width: 440px; }
+  .auth-root        { padding: 12px; align-items: flex-start; }
+  .auth-split       { grid-template-columns: 1fr; max-width: 100%; min-height: 0; margin-top: 56px; }
   .auth-brand       { display: none; }
-  .auth-form-panel  { padding: 32px 24px; }
+  .auth-form-panel  { padding: 24px 16px; }
+  .field-row        { grid-template-columns: 1fr; gap: 10px; }
+  .auth-tab         { font-size: 12px; padding: 10px 8px; }
+  .form-title       { font-size: 20px; }
+  .submit-btn       { padding: 13px; }
+}
+
+@media (max-width: 420px) {
+  .auth-form-panel  { padding: 20px 12px; }
+  .auth-tabs        { margin-bottom: 22px; }
+  .auth-divider     { margin: 16px 0; }
 }
 """
 

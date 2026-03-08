@@ -174,7 +174,8 @@ class AuthForm(AuthFormTemplate):
                 '.auth-theme-slider{position:absolute;inset:0;border-radius:100px;background:var(--border);cursor:pointer;transition:all .2s;}',
                 '.auth-theme-slider::before{content:\"\";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:#fff;transition:transform .2s;}',
                 '.auth-theme-switch input:checked + .auth-theme-slider{background:var(--accent);}',
-                '.auth-theme-switch input:checked + .auth-theme-slider::before{transform:translateX(20px);}'
+                '.auth-theme-switch input:checked + .auth-theme-slider::before{transform:translateX(20px);}',
+                '@media(max-width:700px){.auth-theme-toggle{top:10px;right:10px;padding:4px 8px;gap:6px;}.auth-theme-toggle .lbl{display:none;}.auth-theme-switch{width:38px;height:20px;}.auth-theme-slider::before{width:14px;height:14px;top:3px;left:3px;}.auth-theme-switch input:checked + .auth-theme-slider::before{transform:translateX(18px);}}'
               ].join('');
               document.head.appendChild(style);
             }
