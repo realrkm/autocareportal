@@ -536,7 +536,7 @@ AUTH_BODY = """
       </div>
 
       <div style="font-size:11px;color:var(--text-muted)">
-        &#169; 2025 AutoCare Garage Ltd. &middot; Nairobi
+        &#169; 2026 AutoCare Garage Ltd. &middot; Nairobi
       </div>
     </div>
 
@@ -672,7 +672,7 @@ AUTH_BODY = """
           <div class="input-wrap" style="margin-bottom:10px">
             <span class="input-icon">&#128269;</span>
             <input type="text" id="job-ref-input"
-                   placeholder="e.g. GRG-2025-0001">
+                   placeholder="e.g. GRG-2026-0001">
           </div>
           <div id="job-lookup-results"></div>
         </div>
