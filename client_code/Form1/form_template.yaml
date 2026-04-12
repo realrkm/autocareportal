@@ -1,0 +1,20 @@
+components:
+- components:
+  - components:
+    - name: repeating_panel_1
+      properties: {item_template: Form1.RowTemplate1}
+      type: RepeatingPanel
+    layout_properties: {full_width_row: true, grid_position: 'NZKWOZ,GOYCRI'}
+    name: data_grid_1
+    properties:
+      columns:
+      - {data_key: email, expand: true, id: JKSDUP, title: Email}
+      - {data_key: column_2, id: VJQQOR, title: Column 2}
+      - {data_key: column_3, id: OJLQEN, title: Column 3}
+    type: DataGrid
+  layout_properties: {full_width_row: true, grid_position: 'HYOCGH,VDEQWW'}
+  name: outlined_card_1
+  properties: {role: outlined-card, wrap_on: never}
+  type: ColumnPanel
+container: {type: ColumnPanel}
+is_package: true
