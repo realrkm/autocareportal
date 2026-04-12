@@ -1006,10 +1006,31 @@ input[disabled] ~ span {
 }
 
 /* Data Grids */
-.anvil-role-tonal-data-grid.anvil-data-grid > .data-grid-child-panel>div.auto-grid-header {
+
+/* 1. Added overflow and max-height for scrolling */
+.anvil-role-tonal-data-grid.anvil-data-grid > .data-grid-child-panel {
+  overflow: auto;               /* Enables horizontal and vertical scroll */
+  max-height: 70vh;             /* Adjust this value for vertical height */
+  position: relative;
+  border-radius: 24px;          /* Matches your grid border-radius */
+}
+
+/* 2. Added Sticky Header logic */
+.anvil-role-tonal-data-grid.anvil-data-grid > .data-grid-child-panel > div.auto-grid-header {
   background: linear-gradient(0deg, %color:Primary Overlay 2%, %color:Primary Overlay 2%), %color:Background%;
   border-bottom: 1px solid %color:Surface Variant%;
   border-radius: 24px 24px 0 0;
+  
+  position: sticky;             /* Keep header at top */
+  top: 0;
+  z-index: 10;                  /* Ensure it stays above row content */
+}
+
+/* 3. Force rows to stay wide (fixes horizontal scroll squishing) */
+.anvil-role-tonal-data-grid.anvil-data-grid .anvil-data-row-panel {
+  flex-wrap: nowrap !important;
+  width: fit-content;
+  min-width: 100%;
 }
 
 .anvil-role-tonal-data-grid.anvil-data-grid > .data-grid-child-panel>div.auto-grid-header div.data-row-col > div {
@@ -1020,6 +1041,7 @@ input[disabled] ~ span {
 .anvil-role-tonal-data-grid.anvil-data-grid {
   border-radius: 24px;
   border: 1px solid %color:Surface Variant%;
+  overflow: hidden;             /* Ensures content doesn't bleed out of rounded corners */
 }
 
 .anvil-role-tonal-data-grid.anvil-data-grid .data-grid-child-panel div.data-row-col {
@@ -1055,4 +1077,27 @@ div.plot-container.plotly svg.main-svg {
 
 .anvil-spinner {
     --anvil-spinner-bg: %color:Surface Variant%;
+}
+
+/* Custom Role: Vertical & Horizontal Scroll + Sticky Header */
+.anvil-role-wide-dg .data-grid-child-panel {
+    overflow: auto;             /* Enables both x and y scrolling */
+    max-height: 70vh;           /* Adjust this (e.g., 70% of viewport height) */
+    position: relative;
+}
+
+/* Force rows to stay on one line for horizontal scroll */
+.anvil-role-wide-dg .anvil-data-row-panel {
+    flex-wrap: nowrap !important;
+    width: fit-content;
+    min-width: 100%;
+}
+
+/* Sticky Header Logic */
+.anvil-role-wide-dg .anvil-data-grid-left-edge {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #ffffff;        /* Match your theme's background color */
+    border-bottom: 1px solid #ddd;
 }
